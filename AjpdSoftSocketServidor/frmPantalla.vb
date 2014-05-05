@@ -79,6 +79,7 @@ Public Class frmPantalla
             listaReproduccion.appendItem(videoFile)
         Next
         wmpVideos.currentPlaylist = listaReproduccion
+        wmpVideos.settings.mute = True
         wmpVideos.Ctlcontrols.play()
     End Sub
 
