@@ -1,4 +1,6 @@
-﻿Public Class frmPantalla
+﻿Imports WMPLib
+
+Public Class frmPantalla
     Dim WithEvents socketServidor As New ClaseServidorSocket()
     Public salir As Boolean = True
 
@@ -21,6 +23,7 @@
             socketServidor.Puerto = 11000
             socketServidor.IniciarEscucha()
             Text = "Listo"
+            ListaReproduccion() 'Comienza la reproducción de los videos
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
@@ -53,7 +56,8 @@
             lblV3.Text = lblV2.Text
             lblV2.Text = lblV1.Text
             lblV1.Text = String.Format("Ventanilla #{0}", misdatos(1))
-        Else
+
+        Else 'Rellamado
             SyncLock Me
                 Using frmS As New frmSecuencia
                     frmS.Texto = String.Format("{0} - {1}", misdatos(0).Replace(" ", ""), misdatos(1))
@@ -62,5 +66,23 @@
                 End Using
             End SyncLock
         End If
+    End Sub
+
+    Sub ListaReproduccion()
+        Dim carpeta As New IO.DirectoryInfo("C:\videos-pantalla")
+        Dim arrVideos As IO.FileInfo() = carpeta.GetFiles("*.*")
+        Dim listaReproduccion As IWMPPlaylist = wmpVideos.playlistCollection.newPlaylist("ListadoVideos")
+        listaReproduccion.clear()
+
+        For Each video In arrVideos
+            Dim videoFile As IWMPMedia3 = wmpVideos.newMedia(video.FullName)
+            listaReproduccion.appendItem(videoFile)
+        Next
+        wmpVideos.currentPlaylist = listaReproduccion
+        wmpVideos.Ctlcontrols.play()
+    End Sub
+
+    Private Sub wmpVideos_ClickEvent(sender As Object, e As AxWMPLib._WMPOCXEvents_ClickEvent) Handles wmpVideos.ClickEvent
+        ListaReproduccion()
     End Sub
 End Class
