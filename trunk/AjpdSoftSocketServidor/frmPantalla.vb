@@ -8,6 +8,8 @@ Public Class frmPantalla
         If salir Then End
     End Sub
 
+
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If My.Settings.Voz = "" Then
             frmConfig.Show()
@@ -16,6 +18,8 @@ Public Class frmPantalla
         End If
         CheckForIllegalCrossThreadCalls = False
         IniciarServidor()
+        wmpVideos.settings.mute = True
+        wmpVideos.settings.setMode("loop", True)
     End Sub
 
     Private Sub IniciarServidor()
@@ -43,7 +47,7 @@ Public Class frmPantalla
         If misdatos(2) = 0 Then
             SyncLock Me
                 Using frmS As New frmSecuencia
-                    frmS.Texto = String.Format("{0} - {1}", misdatos(0).Replace(" ", ""), misdatos(1))
+                    frmS.Texto = String.Format("Ticket {0}  Ventanilla {1}", misdatos(0).Replace(" ", ""), misdatos(1))
                     frmS.Llamada = String.Format("Ticket, {0} pasar a ventanilla {1}", misdatos(0), misdatos(1))
                     frmS.ShowDialog()
                 End Using
@@ -60,7 +64,7 @@ Public Class frmPantalla
         Else 'Rellamado
             SyncLock Me
                 Using frmS As New frmSecuencia
-                    frmS.Texto = String.Format("{0} - {1}", misdatos(0).Replace(" ", ""), misdatos(1))
+                    frmS.Texto = String.Format("Ticket {0}  Ventanilla {1}", misdatos(0).Replace(" ", ""), misdatos(1))
                     frmS.Llamada = String.Format("Ticket, {0} pasar a ventanilla {1}", misdatos(0), misdatos(1))
                     frmS.ShowDialog()
                 End Using
@@ -79,11 +83,21 @@ Public Class frmPantalla
             listaReproduccion.appendItem(videoFile)
         Next
         wmpVideos.currentPlaylist = listaReproduccion
-        wmpVideos.settings.mute = True
         wmpVideos.Ctlcontrols.play()
     End Sub
 
-    Private Sub wmpVideos_ClickEvent(sender As Object, e As AxWMPLib._WMPOCXEvents_ClickEvent) Handles wmpVideos.ClickEvent
+
+
+    Private Sub wmpVideos_DoubleClickEvent(sender As Object, e As AxWMPLib._WMPOCXEvents_DoubleClickEvent) Handles wmpVideos.DoubleClickEvent
         ListaReproduccion()
+    End Sub
+
+    
+    Private Sub wmpVideos_ClickEvent(sender As Object, e As AxWMPLib._WMPOCXEvents_ClickEvent) Handles wmpVideos.ClickEvent
+        If wmpVideos.uiMode = "full" Then
+            wmpVideos.uiMode = "none"
+        Else
+            wmpVideos.uiMode = "full"
+        End If
     End Sub
 End Class

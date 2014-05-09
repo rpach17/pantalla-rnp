@@ -55,5 +55,4 @@ Public Class frmSecuencia
         Hablar()
     End Sub
 
-
 End Class

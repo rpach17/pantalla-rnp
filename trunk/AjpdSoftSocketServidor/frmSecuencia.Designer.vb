@@ -30,7 +30,7 @@ Partial Class frmSecuencia
         'Label1
         '
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 50.0!)
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 120.0!)
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(549, 370)
